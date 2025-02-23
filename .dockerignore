@@ -11,18 +11,26 @@ ENV/
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
 
-# Arquivos de IDE
+# IDE
 .idea/
 .vscode/
-
-# Dados e modelos (serão criados no container)
-data/
-models/
-
-# Logs
-*.log
+*.swp
+*.swo
 
 # Arquivos do sistema
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
+
+# Railway
+.railway/
+
+# Local data e models (serão criados no container)
+/data/*
+!/data/.gitkeep
+/models/*
+!/models/.gitkeep
