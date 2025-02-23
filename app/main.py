@@ -1,18 +1,32 @@
 from fastapi import FastAPI, HTTPException
 from typing import List, Optional
-from app.recommender import ImprovedNewsRecommender
+from app.recommender import NewsRecommender
 import os
 import logging
+from pathlib import Path
 
 # Configuração de logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Cria a aplicação FastAPI
-app = FastAPI(title="G1 News Recommender")
+app = FastAPI(
+    title="G1 News Recommender",
+    description="API de recomendação de notícias do G1",
+    version="1.0.0"
+)
 
-# Carrega o modelo
-model_path = "models/recommender.pkl"
+# Configurações
+MODEL_DIR = os.getenv("MODEL_DIR", "models")
+DATA_DIR = os.getenv("DATA_DIR", "data/raw")
+PORT = int(os.getenv("PORT", 8000))
+
+# Garante que os diretórios existem
+Path(MODEL_DIR).mkdir(parents=True, exist_ok=True)
+Path(DATA_DIR).mkdir(parents=True, exist_ok=True)
+
+# Caminho do modelo
+model_path = os.path.join(MODEL_DIR, "recommender.pkl")
 recommender = None
 
 @app.on_event("startup")
@@ -23,15 +37,12 @@ async def startup_event():
     try:
         if os.path.exists(model_path):
             logger.info("Tentando carregar modelo existente...")
-            recommender = ImprovedNewsRecommender.load_model(model_path)
+            recommender = NewsRecommender.load_model(model_path)
             logger.info("Modelo carregado com sucesso!")
         else:
             logger.info("Modelo não encontrado. Treinando novo modelo...")
-            recommender = ImprovedNewsRecommender()
-            recommender.load_and_prepare_data("data/raw")
-            
-            # Criar diretório models se não existir
-            os.makedirs(os.path.dirname(model_path), exist_ok=True)
+            recommender = NewsRecommender()
+            recommender.load_and_prepare_data(DATA_DIR)
             
             # Salvar o novo modelo
             recommender.save_model(model_path)
@@ -41,13 +52,27 @@ async def startup_event():
         logger.error(f"Erro ao inicializar o modelo: {str(e)}")
         logger.info("Tentando treinar novo modelo...")
         try:
-            recommender = ImprovedNewsRecommender()
-            recommender.load_and_prepare_data("data/raw")
+            recommender = NewsRecommender()
+            recommender.load_and_prepare_data(DATA_DIR)
             recommender.save_model(model_path)
             logger.info("Novo modelo treinado e salvo com sucesso!")
         except Exception as e:
             logger.error(f"Erro ao treinar novo modelo: {str(e)}")
             raise
+
+@app.get("/")
+async def root():
+    """Endpoint raiz com informações básicas."""
+    return {
+        "app": "G1 News Recommender",
+        "status": "running",
+        "model_loaded": recommender is not None,
+        "endpoints": [
+            "/recommend/{user_id}",
+            "/popular",
+            "/health"
+        ]
+    }
 
 @app.get("/recommend/{user_id}")
 async def get_recommendations(user_id: str, n: Optional[int] = 5):
@@ -81,4 +106,4 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
