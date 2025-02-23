@@ -1,0 +1,39 @@
+# Ambiente virtual
+venv/
+env/
+ENV/
+
+# Dados
+data/
+*.csv
+
+# Arquivos de modelo
+models/
+*.pkl
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribuição / empacotamento
+dist/
+build/
+*.egg-info/
+
+# Arquivos de IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Arquivos de ambiente
+.env
+.env.local
+
+# Logs
+*.log
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
