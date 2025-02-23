@@ -1,0 +1,28 @@
+# Ambiente virtual
+venv/
+env/
+ENV/
+
+# Git
+.git
+.gitignore
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Arquivos de IDE
+.idea/
+.vscode/
+
+# Dados e modelos (serão criados no container)
+data/
+models/
+
+# Logs
+*.log
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
