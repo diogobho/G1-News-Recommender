@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from typing import List, Optional
-from app.recommender import NewsRecommender
+from app.recommender import ImprovedNewsRecommender
 import os
 import logging
 from pathlib import Path
@@ -18,12 +18,10 @@ app = FastAPI(
 
 # Configurações
 MODEL_DIR = os.getenv("MODEL_DIR", "models")
-DATA_DIR = os.getenv("DATA_DIR", "data/raw")
 PORT = int(os.getenv("PORT", 8000))
 
-# Garante que os diretórios existem
+# Garante que o diretório models existe
 Path(MODEL_DIR).mkdir(parents=True, exist_ok=True)
-Path(DATA_DIR).mkdir(parents=True, exist_ok=True)
 
 # Caminho do modelo
 model_path = os.path.join(MODEL_DIR, "recommender.pkl")
@@ -37,16 +35,16 @@ async def startup_event():
     try:
         if os.path.exists(model_path):
             logger.info("Tentando carregar modelo existente...")
-            recommender = NewsRecommender.load_model(model_path)
+            recommender = ImprovedNewsRecommender.load_model(model_path)
             logger.info("Modelo carregado com sucesso!")
         else:
-            logger.warning("Modelo não encontrado e dados não disponíveis para treinamento.")
+            logger.warning("Modelo não encontrado.")
             logger.warning("API funcionará em modo limitado.")
-            recommender = NewsRecommender()
+            recommender = ImprovedNewsRecommender()
     except Exception as e:
         logger.error(f"Erro ao inicializar o modelo: {str(e)}")
         logger.warning("API funcionará em modo limitado.")
-        recommender = NewsRecommender()
+        recommender = ImprovedNewsRecommender()
 
 @app.get("/")
 async def root():
@@ -109,7 +107,6 @@ async def health_check():
     return {
         "status": "healthy",
         "model_status": "limited" if not os.path.exists(model_path) else "full",
-        "data_dir_exists": os.path.exists(DATA_DIR),
         "model_dir_exists": os.path.exists(MODEL_DIR)
     }
 
