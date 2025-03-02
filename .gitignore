@@ -1,3 +1,6 @@
+# Credenciais de serviço
+credentials.json
+
 # Arquivos grandes
 *.pkl
 models/

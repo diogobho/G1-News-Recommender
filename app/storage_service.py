@@ -15,19 +15,18 @@ class StorageService:
     
     @staticmethod
     def get_client():
-        """Obtém o cliente do Google Cloud Storage usando credenciais de conta de serviço."""
         try:
-            # Caminho para o arquivo de credenciais da conta de serviço
-            credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS', 'credentials.json')
+            credentials_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
             
-            if not os.path.exists(credentials_path):
-                logger.error(f"Arquivo de credenciais não encontrado: {credentials_path}")
+            if not credentials_json:
+                logger.error("Credenciais não encontradas!")
                 return None
-                
-            # Cria o cliente do Storage com as credenciais
-            client = storage.Client.from_service_account_json(credentials_path)
             
-            return client
+            # Converte JSON string para dicionário
+            credentials_dict = json.loads(credentials_json)
+            credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+            
+            return storage.Client(credentials=credentials)
             
         except Exception as e:
             logger.error(f"Erro ao criar cliente do Storage: {str(e)}")
