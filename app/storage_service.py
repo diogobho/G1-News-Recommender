@@ -1,3 +1,4 @@
+import json
 import os
 import pickle
 import io
@@ -15,6 +16,7 @@ class StorageService:
     
     @staticmethod
     def get_client():
+        """Obtém o cliente do Google Cloud Storage usando credenciais de conta de serviço."""
         try:
             credentials_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
             

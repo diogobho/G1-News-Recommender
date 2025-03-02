@@ -25,8 +25,6 @@ PORT = int(os.getenv("PORT", 8000))
 BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "news-recommender-models")  # Substitua pelo nome do seu bucket
 BLOB_NAME = os.getenv("GCS_BLOB_NAME", "recommender.pkl")
 
-# Define o caminho das credenciais
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GOOGLE_APPLICATION_CREDENTIALS', 'credentials.json')
 
 # Garante que o diretório models existe
 Path(MODEL_DIR).mkdir(parents=True, exist_ok=True)
