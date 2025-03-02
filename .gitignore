@@ -1,3 +1,7 @@
+# Arquivos grandes
+*.pkl
+models/
+
 # Ambiente virtual
 venv/
 env/
@@ -6,10 +10,6 @@ ENV/
 # Dados
 data/
 *.csv
-
-# Arquivos de modelo
-models/
-*.pkl
 
 # Cache Python
 __pycache__/
