@@ -37,5 +37,3 @@ build/
 # Arquivos do sistema
 .DS_Store
 Thumbs.db
-
-echo "models/recommender.pkl" >> .gitignore
