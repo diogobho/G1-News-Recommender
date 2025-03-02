@@ -8,8 +8,8 @@ data/
 *.csv
 
 # Arquivos de modelo
-# models/
-# *.pkl
+models/
+*.pkl
 
 # Cache Python
 __pycache__/
