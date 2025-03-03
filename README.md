@@ -203,3 +203,9 @@ Para atualizar o modelo:
 ---
 
 Para mais informações, consulte a documentação interativa da API ou entre em contato com a equipe de desenvolvimento.
+
+### 👥 Colaboradores
+
+- **[Reryson Farinha](https://www.linkedin.com/in/reryson-farinha)**  
+- **[Diogo Bortolozo](https://www.linkedin.com/in/diogo-bortolozo-6a0ba993?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BQk5ycbmjS%2FyEInZ7UXlVKA%3D%3D)**
+
